@@ -3,17 +3,15 @@ package domain;
 public class Tournament {
 
    private long   id;
-   private String place;
    private double entry_fee;
    private double win;
-   private long   place_id;
+   private Long   place_id;
 
    public Tournament() {
    }
 
-   public Tournament(String place, double entry_fee, double win, long place_id) {
+   public Tournament(double entry_fee, double win, Long place_id) {
       super();
-      this.place = place;
       this.entry_fee = entry_fee;
       this.win = win;
       this.place_id = place_id;
@@ -25,14 +23,6 @@ public class Tournament {
 
    public void setId(long id) {
       this.id = id;
-   }
-
-   public String getPlace() {
-      return place;
-   }
-
-   public void setPlace(String place) {
-      this.place = place;
    }
 
    public double getEntry_fee() {
@@ -51,11 +41,11 @@ public class Tournament {
       this.win = win;
    }
 
-   public long getPlace_id() {
+   public Long getPlace_id() {
       return place_id;
    }
 
-   public void setPlace_id(long place_id) {
+   public void setPlace_id(Long place_id) {
       this.place_id = place_id;
    }
 }
