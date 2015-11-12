@@ -7,6 +7,7 @@ public class Place {
    private String city;
    private String name;
 
+// getery setery do ustawiania i pobierania wartosci pól obiektu, nie z bazy, z obiektu
    public Place() {
    }
 
@@ -17,6 +18,7 @@ public class Place {
       this.name = name;
    }
 
+//this oznacza obiekt na ktorym wywolywana jest metoda
    public long getId() {
       return id;
    }

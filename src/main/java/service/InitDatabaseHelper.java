@@ -15,7 +15,7 @@ public class InitDatabaseHelper {
       // sprawdzanie, czy istnieją poszczególne tabele 
       ResultSet rs = conn.getMetaData().getTables(null, null, null, null);
       boolean placeExists = false, tournamentExists = false, playerExists = false, p_tExists = false;
-      while (rs.next()) {
+      while (rs.next()) {// sprawdza czy poszczegolne tabele istnieja
          if ("Place".equalsIgnoreCase(rs.getString("TABLE_NAME"))) {
             placeExists = true;
          }
@@ -70,6 +70,6 @@ public class InitDatabaseHelper {
                "FOREIGN KEY (player_id) REFERENCES Player(id)," + //
                "FOREIGN KEY (tournament_id) REFERENCES Tournament(id)" + //
                ")");
-      return conn;
+      return conn; //zwraca polaczenie do bazy danych
    }
 }
