@@ -12,8 +12,7 @@ import domain.Tournament;
 
 public class PlaceManager {
 
-   private Connection        conn;                 //typy klasowe nie proste bo z duzej
-   //typ ps do przechowywania zapytan do bazy, getallplaces zmienna mogaca przechowywac obiekt
+   private Connection        conn;                 
    private PreparedStatement getAllPlaces;
    private PreparedStatement deleteAllPlaces;
    private PreparedStatement addPlace;
@@ -23,8 +22,8 @@ public class PlaceManager {
 
    public PlaceManager() {
       try {
-         conn = InitDatabaseHelper.initDB(); //metoda do tworzenia i laczenia z baza, metoda zwraca polaczenie do bazy
-         getAllPlaces = conn.prepareStatement("SELECT id, country, city, name FROM Place"); //preapre s metoda do stworzenia obiektu przechowujacwego zapytanie
+         conn = InitDatabaseHelper.initDB();  //zwrócenie polaczenie do bazy
+         getAllPlaces = conn.prepareStatement("SELECT id, country, city, name FROM Place"); 
          getPlaceById = conn.prepareStatement("SELECT id, country, city, name FROM Place WHERE id = ?");
          deletePlaceById = conn.prepareStatement("DELETE FROM Place WHERE id = ?");
          deleteAllPlaces = conn.prepareStatement("DELETE FROM Place");
@@ -35,14 +34,14 @@ public class PlaceManager {
       }
    }
 
-//placemanager klasa do wykonywania operacji na danej tabeli z bazy
+
    public Place getPlaceById(long id) {
       try {
-         getPlaceById.setLong(1, id); //1 oznacza ktory xznak zapytania, a potem podajemy wartosc
-         //result rs zawiera zawsze to co pobralismy z bazy, resultset typ zmiennej tego co z bazy bierzemy, rs przechowuje wynik zapytania
-         ResultSet rs = getPlaceById.executeQuery();//wykonanie zapytania ktore jest juz przechowywane w getp
+         getPlaceById.setLong(1, id); // zapytania + wartosc
+         // rs - wynik zapytania
+         ResultSet rs = getPlaceById.executeQuery();
          if (rs.next()) {
-            Place p = new Place(); //do obiektu klasy place wpisuje wartosci rekordu
+            Place p = new Place();
             p.setId(rs.getLong("id"));
             p.setCountry(rs.getString("country"));
             p.setCity(rs.getString("city"));
@@ -67,7 +66,7 @@ public class PlaceManager {
    }
 
    public void addPlace(Place p) {
-      try { // obiekt p jest przekazany do zapisania w bazie, przepisuje wartosci pol z p i wpisuje w odpowiadajaca mijsca w zapytaniu
+      try { 
          addPlace.setString(1, p.getCountry());
          addPlace.setString(2, p.getCity());
          addPlace.setString(3, p.getName());
@@ -97,7 +96,7 @@ public class PlaceManager {
 
    public void deleteAllPlaces() {
       try {
-         // executeUpdate, bo przeprowadzamy zmiany w bazie
+         
          deleteAllPlaces.executeUpdate();
       } catch (SQLException e) {
          e.printStackTrace();
