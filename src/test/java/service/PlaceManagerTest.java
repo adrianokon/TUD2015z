@@ -89,14 +89,14 @@ public class PlaceManagerTest {
    }
 
    @Test
-   // tworzymy obiekt klasy Place, dodajemy go do tabeli Place, 
+    
    public void testDeleteAll() {
       Place p = new Place();
       p.setName("abc");
       p.setCity("Gdansk");
       p.setCountry("Polska");
       placeManager.addPlace(p);
-      placeManager.deleteAllPlaces(); //Usuwamy rekordy z tabeli Place
+      placeManager.deleteAllPlaces(); 
       List<Place> list = placeManager.getAllPlaces();
       assertEquals(list.size(), 0);
    }
