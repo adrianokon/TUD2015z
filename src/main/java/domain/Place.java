@@ -1,5 +1,6 @@
 package domain;
 
+
 public class Place {
 
    private long   id;
