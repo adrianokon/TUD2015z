@@ -6,6 +6,7 @@ import java.util.List;
 import org.junit.Test;
 import domain.Place;
 
+
 public class PlaceManagerTest {
 
    PlaceManager placeManager = new PlaceManager();
