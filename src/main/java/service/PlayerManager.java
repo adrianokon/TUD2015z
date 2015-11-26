@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import domain.Player;
+import domain.Tournament;
 
 public class PlayerManager {
 
@@ -14,16 +15,68 @@ public class PlayerManager {
    private PreparedStatement getAllPlayers;
    private PreparedStatement deleteAllPlayers;
    private PreparedStatement addPlayer;
+   private PreparedStatement getTournamentsByPlayer;
+   private PreparedStatement addPlayer_tournament;
+   private PreparedStatement deletePlayer_tournament;
+   private PreparedStatement deleteAllPlayer_tournament;
 
    public PlayerManager() {
       try {
          conn = InitDatabaseHelper.initDB();
+         deleteAllPlayer_tournament = conn.prepareStatement("DELETE FROM Player_tournament");
+         deletePlayer_tournament = conn.prepareStatement(//
+         "DELETE FROM Player_tournament WHERE player_id = ?");
+         addPlayer_tournament = conn.prepareStatement(//
+         "INSERT INTO Player_tournament(player_id, tournament_id) VALUES(?, ?)");
+         getTournamentsByPlayer = conn.prepareStatement(//
+         "SELECT id, entry_fee, win, place_id " + //
+               " FROM Tournament t " + //
+               " JOIN Player_tournament pt ON t.id=pt.tournament_id" + //
+               " WHERE pt.player_id = ?");
          getAllPlayers = conn.prepareStatement("SELECT id, nick, country, ranking, earned_money, wins_count FROM Player");
          deleteAllPlayers = conn.prepareStatement("DELETE FROM Player");
          addPlayer = conn.prepareStatement("INSERT INTO Player(nick, country, ranking, earned_money, wins_count) VALUES(?, ?, ?, ?, ?)");
       } catch (SQLException e) {
          e.printStackTrace();
       }
+   }
+
+   public void addPlayer_tournament(long player_id, long tournament_id) {
+      try {
+         addPlayer_tournament.setLong(1, player_id);
+         addPlayer_tournament.setLong(2, tournament_id);
+         addPlayer_tournament.executeUpdate();
+      } catch (SQLException e) {
+         e.printStackTrace();
+      }
+   }
+
+   public void deletePlayer_Tournament(long player_id) {
+      try {
+         deletePlayer_tournament.setLong(1, player_id);
+         deletePlayer_tournament.executeUpdate();
+      } catch (SQLException e) {
+         e.printStackTrace();
+      }
+   }
+
+   public ArrayList<Tournament> getTournamentsByPlayer(long player_id) {
+      ArrayList<Tournament> list = new ArrayList<Tournament>();
+      try {
+         getTournamentsByPlayer.setLong(1, player_id);
+         ResultSet rs = getTournamentsByPlayer.executeQuery();
+         while (rs.next()) {
+            Tournament t = new Tournament();
+            t.setId(rs.getLong("id"));
+            t.setEntry_fee(rs.getDouble("entry_fee"));
+            t.setWin(rs.getDouble("win"));
+            t.setPlace_id(rs.getLong("place_id"));
+            list.add(t);
+         }
+      } catch (SQLException e) {
+         e.printStackTrace();
+      }
+      return list;
    }
 
    public void addPlayer(Player p) {
@@ -60,6 +113,9 @@ public class PlayerManager {
 
    public void deleteAllPlayers() {
       try {
+         // usunięcie wszystkich powiązań
+         // skoro usuwamy wszystkich graczy, to powiązania z nimi też
+         deleteAllPlayer_tournament.executeUpdate();
          // executeUpdate, bo przeprowadzamy zmiany w bazie
          deleteAllPlayers.executeUpdate();
       } catch (SQLException e) {

@@ -1,12 +1,49 @@
 package service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import java.util.List;
 import org.junit.Test;
 import domain.Player;
+import domain.Tournament;
 
 public class PlayerManagerTest {
 
    PlayerManager playerManager = new PlayerManager();
+
+   @Test
+   public void testAddPlayerTournament() {
+      Player p = new Player();
+      p.setCountry("Polska");
+      p.setEarned_money(1200);
+      p.setNick("abc");
+      p.setRanking(1);
+      p.setWins_count(0);
+      playerManager.addPlayer(p);
+      //
+      Tournament t = new Tournament();
+      t.setEntry_fee(123);
+      t.setWin(100);
+      TournamentManager tm = new TournamentManager();
+      tm.addTournament(t);
+      //
+      List<Player> l = playerManager.getAllPlayers();
+      Player jas = l.get(0);
+      List<Tournament> l2 = tm.getAllTournaments();
+      Tournament malgosia = l2.get(0);
+      //
+      playerManager.addPlayer_tournament(jas.getId(), malgosia.getId());
+      List<Tournament> turniejeJasia = playerManager.getTournamentsByPlayer(jas.getId());
+      //
+      for (int i = 0; i < turniejeJasia.size(); i++) {
+         Tournament turniej = turniejeJasia.get(i);
+         if (malgosia.getId() == turniej.getId()) {
+            assertTrue(true);
+            return;
+         }
+      }
+      assertTrue(false);
+   }
 
    @Test
    public void testAddPlayer() {
