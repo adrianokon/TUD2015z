@@ -17,14 +17,17 @@ public class PlayerManager {
    private PreparedStatement addPlayer;
    private PreparedStatement getTournamentsByPlayer;
    private PreparedStatement addPlayer_tournament;
-   private PreparedStatement deletePlayer_tournament;
+   private PreparedStatement deletePlayer_tournamentByPlayer;
    private PreparedStatement deleteAllPlayer_tournament;
+   private PreparedStatement deleteOnePlayer_tournament;
 
    public PlayerManager() {
       try {
          conn = InitDatabaseHelper.initDB();
+         deleteOnePlayer_tournament = conn.prepareStatement(
+        		 "DELETE FROM Player_tournament WHERE player_id = ? AND tournament_id = ?");
          deleteAllPlayer_tournament = conn.prepareStatement("DELETE FROM Player_tournament");
-         deletePlayer_tournament = conn.prepareStatement(//
+         deletePlayer_tournamentByPlayer = conn.prepareStatement(//
          "DELETE FROM Player_tournament WHERE player_id = ?");
          addPlayer_tournament = conn.prepareStatement(//
          "INSERT INTO Player_tournament(player_id, tournament_id) VALUES(?, ?)");
@@ -41,20 +44,29 @@ public class PlayerManager {
       }
    }
 
-   public void addPlayer_tournament(long player_id, long tournament_id) {
+   public void addPlayer_tournament(Player p, Tournament t) {
       try {
-         addPlayer_tournament.setLong(1, player_id);
-         addPlayer_tournament.setLong(2, tournament_id);
+         addPlayer_tournament.setLong(1, p.getId());
+         addPlayer_tournament.setLong(2, t.getId());
          addPlayer_tournament.executeUpdate();
       } catch (SQLException e) {
          e.printStackTrace();
       }
    }
 
-   public void deletePlayer_Tournament(long player_id) {
+   public void deleteOnePlayer_tournament (long player_id, long tournament_id){
+	  try {
+		deleteOnePlayer_tournament.setLong(1, player_id);
+		deleteOnePlayer_tournament.setLong(2, tournament_id);
+		deleteOnePlayer_tournament.executeUpdate();
+	} catch (SQLException e) {
+		e.printStackTrace();
+	} 
+   }
+   public void deletePlayer_TournamentByPlayer(long player_id) {
       try {
-         deletePlayer_tournament.setLong(1, player_id);
-         deletePlayer_tournament.executeUpdate();
+         deletePlayer_tournamentByPlayer.setLong(1, player_id);
+         deletePlayer_tournamentByPlayer.executeUpdate();
       } catch (SQLException e) {
          e.printStackTrace();
       }
