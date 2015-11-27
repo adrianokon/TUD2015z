@@ -1,5 +1,6 @@
 package domain;
 
+
 public class Player {
 
    private long    id;
