@@ -125,10 +125,9 @@ public class PlayerManager {
 
    public void deleteAllPlayers() {
       try {
-         // usunięcie wszystkich powiązań
-         // skoro usuwamy wszystkich graczy, to powiązania z nimi też
+        
          deleteAllPlayer_tournament.executeUpdate();
-         // executeUpdate, bo przeprowadzamy zmiany w bazie
+
          deleteAllPlayers.executeUpdate();
       } catch (SQLException e) {
          e.printStackTrace();
